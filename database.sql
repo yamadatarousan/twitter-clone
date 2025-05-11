@@ -1,0 +1,7 @@
+  CREATE TABLE tweets (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       content TEXT NOT NULL,
+       user_id INT NOT NULL,
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   );
