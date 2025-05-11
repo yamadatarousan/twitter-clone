@@ -12,3 +12,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, error: 'Failed to create tweet' }, { status: 500 });
     }
 }
+
+export async function GET() {
+    const [tweets] = await pool.query('SELECT id, content, created_at FROM tweets ORDER BY created_at DESC');
+    return NextResponse.json(tweets);
+}
