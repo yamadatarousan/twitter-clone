@@ -5,19 +5,25 @@ import { useSession } from 'next-auth/react';
 type Props = { onTweetPosted?: () => void };
 
 const TweetForm = ({ onTweetPosted }: Props) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [content, setContent] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!session) return;
+    if (status !== 'authenticated' || !session?.user?.id) {
+      console.error('No valid session or user ID', { status, session });
+      return;
+    }
     try {
       const response = await fetch('/api/tweets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content, user_id: parseInt(session.user.id) }),
       });
-      if (!response.ok) throw new Error('Failed to create tweet');
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error || 'Failed to create tweet');
+      }
       await response.json();
       setContent('');
       onTweetPosted?.();
@@ -26,6 +32,7 @@ const TweetForm = ({ onTweetPosted }: Props) => {
     }
   };
 
+  if (status === 'loading') return <p>Loading...</p>;
   if (!session) return <p className="text-red-500">Please log in to tweet</p>;
 
   return (

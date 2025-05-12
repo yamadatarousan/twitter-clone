@@ -13,7 +13,9 @@ export const authOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [credentials.email]);
+        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [
+          credentials.email,
+        ]);
         const user = (rows as any[])[0];
         if (!user || !(await bcrypt.compare(credentials.password, user.password))) return null;
         return { id: user.id.toString(), email: user.email };
@@ -27,6 +29,25 @@ export const authOptions = {
     strategy: 'jwt' as const,
   },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user }: { token: any; user: any }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: any; token: any }) {
+      session.user = session.user || {};
+      if (token.id) {
+        session.user.id = token.id;
+      }
+      if (token.email) {
+        session.user.email = token.email;
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
