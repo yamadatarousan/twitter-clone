@@ -17,3 +17,10 @@ export async function GET() {
     const [tweets] = await pool.query('SELECT id, content, created_at FROM tweets ORDER BY created_at DESC');
     return NextResponse.json(tweets);
 }
+
+export async function DELETE(request: Request) {
+    const { id } = await request.json();
+    if (typeof id !== 'number') return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+    await pool.query('DELETE FROM tweets WHERE id = ?', [id]);
+    return NextResponse.json({ message: 'Tweet deleted' }, { status: 200 });
+}

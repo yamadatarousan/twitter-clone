@@ -31,6 +31,15 @@ export default function TweetPage() {
           <div key={tweet.id} className="p-2 border rounded-md">
             <p>{tweet.content}</p>
             <p className="text-sm text-gray-500">{new Date(tweet.created_at).toLocaleString()}</p>
+            <button
+                onClick={async () => {
+                    await fetch('/api/tweets', { method: 'DELETE', body: JSON.stringify({ id: tweet.id }) });
+                    setRefresh((prev) => prev + 1);
+                }}
+                className="text-red-500"
+            >
+                Delete
+            </button>
           </div>
         ))}
       </div>
