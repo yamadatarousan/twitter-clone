@@ -15,3 +15,14 @@ CREATE TABLE users (
 );
 
 ALTER TABLE tweets ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+
+CREATE TABLE follows (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  follower_id INT NOT NULL, -- フォローするユーザー
+  followee_id INT NOT NULL, -- フォローされるユーザー
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (follower_id, followee_id), -- 重複フォロー防止
+  FOREIGN KEY (follower_id) REFERENCES users(id),
+  FOREIGN KEY (followee_id) REFERENCES users(id)
+);
