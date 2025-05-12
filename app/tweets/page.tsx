@@ -59,6 +59,7 @@ export default function TweetPage() {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id: tweet.id }),
+                    credentials: 'include',
                   });
                   setRefresh((prev) => prev + 1);
                 }}

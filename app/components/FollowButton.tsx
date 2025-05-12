@@ -10,7 +10,7 @@ export default function FollowButton({ followeeId, onFollowChange }: Props) {
 
   useEffect(() => {
     if (session?.user?.id) {
-      fetch(`/api/follows?followee_id=${followeeId}`)
+      fetch(`/api/follows?followee_id=${followeeId}`, { credentials: 'include' })
         .then((res) => res.json())
         .then((data) => setIsFollowing(data.isFollowing));
     }
@@ -23,6 +23,7 @@ export default function FollowButton({ followeeId, onFollowChange }: Props) {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ followee_id: followeeId }),
+      credentials: 'include',
     });
     if (response.ok) {
       setIsFollowing(!isFollowing);
