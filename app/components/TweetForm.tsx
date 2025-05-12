@@ -33,7 +33,10 @@ const TweetForm = ({ onTweetPosted }: Props) => {
   };
 
   if (status === 'loading') return <p>Loading...</p>;
-  if (!session) return <p className="text-red-500">Please log in to tweet</p>;
+  if (!session || !session.user?.id) {
+    console.warn('Session unavailable', { status, session });
+    return <p className="text-red-500">Please log in to tweet</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">

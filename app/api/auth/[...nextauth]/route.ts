@@ -18,6 +18,7 @@ export const authOptions = {
         ]);
         const user = (rows as any[])[0];
         if (!user || !(await bcrypt.compare(credentials.password, user.password))) return null;
+        console.log('Authorized user:', { id: user.id.toString(), email: user.email });
         return { id: user.id.toString(), email: user.email };
       },
     }),
@@ -34,6 +35,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        console.log('JWT token:', token);
       }
       return token;
     },
@@ -45,6 +47,7 @@ export const authOptions = {
       if (token.email) {
         session.user.email = token.email;
       }
+      console.log('Session:', session);
       return session;
     },
   },
