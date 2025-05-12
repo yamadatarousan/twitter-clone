@@ -8,6 +8,9 @@ const TweetForm = ({ onTweetPosted }: Props) => {
   const { data: session, status } = useSession();
   const [content, setContent] = useState('');
 
+  // デバッグログ追加
+  console.log('Session Debug:', { status, session });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (status !== 'authenticated' || !session?.user?.id) {
@@ -33,10 +36,7 @@ const TweetForm = ({ onTweetPosted }: Props) => {
   };
 
   if (status === 'loading') return <p>Loading...</p>;
-  if (!session || !session.user?.id) {
-    console.warn('Session unavailable', { status, session });
-    return <p className="text-red-500">Please log in to tweet</p>;
-  }
+  if (!session) return <p className="text-red-500">Please log in to tweet</p>;
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
