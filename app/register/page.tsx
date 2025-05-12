@@ -1,8 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { pool } from '@/lib/db';
-import bcrypt from 'bcrypt';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -13,8 +11,15 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await pool.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword]);
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        const { error } = await response.json();
+        throw new Error(error);
+      }
       router.push('/login');
     } catch (error) {
       setError('Email already exists or invalid input');
