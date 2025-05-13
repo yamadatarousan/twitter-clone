@@ -21,6 +21,12 @@ export default function Nav() {
           <div className="flex items-center space-x-4">
             {session ? (
               <>
+                <Link
+                  href="/profile"
+                  className="text-gray-600 hover:text-gray-900 transition"
+                >
+                  Profile
+                </Link>
                 <span className="text-gray-600">{session.user?.email}</span>
                 <button 
                   onClick={() => signOut()} 

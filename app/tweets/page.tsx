@@ -9,6 +9,7 @@ type Tweet = {
   created_at: string;
   user_id: number;
   user_email: string;
+  username: string | null;
 };
 
 export default function TweetPage() {
@@ -45,13 +46,15 @@ export default function TweetPage() {
                 <div className="flex items-center space-x-2 mb-2">
                   {session?.user?.id === tweet.user_id.toString() ? (
                     <>
-                      <span className="font-medium text-gray-900">{tweet.user_email}</span>
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">You</span>
+                      <span className="font-medium text-gray-900">
+                        {tweet.username || 'You'} 
+                        <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">You</span>
+                      </span>
                     </>
                   ) : (
                     <span className="font-medium text-gray-900">
-                      User #{tweet.user_id}
-                      <span className="text-xs text-gray-500 ml-2">({tweet.user_email})</span>
+                      {tweet.username || `User #${tweet.user_id}`}
+                      <span className="text-xs text-gray-500 ml-2">(ID: {tweet.user_id})</span>
                     </span>
                   )}
                 </div>
