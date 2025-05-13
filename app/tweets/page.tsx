@@ -43,9 +43,16 @@ export default function TweetPage() {
             <div className="flex justify-between items-start">
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-2">
-                  <span className="font-medium text-gray-900">{tweet.user_email}</span>
-                  {session?.user?.id === tweet.user_id.toString() && (
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">You</span>
+                  {session?.user?.id === tweet.user_id.toString() ? (
+                    <>
+                      <span className="font-medium text-gray-900">{tweet.user_email}</span>
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">You</span>
+                    </>
+                  ) : (
+                    <span className="font-medium text-gray-900">
+                      User #{tweet.user_id}
+                      <span className="text-xs text-gray-500 ml-2">({tweet.user_email})</span>
+                    </span>
                   )}
                 </div>
                 <p className="text-gray-800 text-lg">{tweet.content}</p>
